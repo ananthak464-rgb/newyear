@@ -1,70 +1,139 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Happy New Year ❤️</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Happy New Year ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      background: linear-gradient(135deg, #ffdde1, #ee9ca7);
-      font-family: 'Segoe UI', sans-serif;
-      text-align: center;
-      padding: 20px;
-      color: #333;
-    }
+<style>
+  body {
+    margin: 0;
+    background: black;
+    color: white;
+    font-family: 'Segoe UI', sans-serif;
+    overflow: hidden;
+    text-align: center;
+  }
 
-    .card {
-      background: white;
-      border-radius: 20px;
-      padding: 25px;
-      max-width: 500px;
-      margin: auto;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    }
+  #openBtn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 28px;
+    padding: 20px 40px;
+    border-radius: 30px;
+    background: #ff4d6d;
+    border: none;
+    color: white;
+    cursor: pointer;
+  }
 
-    h1 {
-      color: #e63946;
-    }
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+  }
 
-    img {
-      width: 100%;
-      border-radius: 15px;
-      margin: 15px 0;
-    }
+  #title {
+    display: none;
+    font-size: 40px;
+    margin-top: 100px;
+    animation: fadeIn 2s ease-in-out forwards;
+  }
 
-    p {
-      font-size: 18px;
-      line-height: 1.6;
-    }
+  #letter {
+    display: none;
+    max-width: 500px;
+    background: white;
+    color: #333;
+    margin: 30px auto;
+    padding: 25px;
+    border-radius: 20px;
+    animation: slideUp 2s ease forwards;
+  }
 
-    .heart {
-      font-size: 40px;
-      margin-top: 20px;
-    }
-  </style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+</style>
 </head>
 
 <body>
 
-  <!-- Background Music -->
-  <audio autoplay loop>
-    <source src="song.mp3" type="audio/mpeg">
-  </audio>
+<button id="openBtn">OPEN 🎁</button>
 
-  <div class="card">
-    <h1>Happy New Year 🎉</h1>
+<canvas id="canvas"></canvas>
 
-    <!-- Image -->
-    <img src="her.jpg" alt="Special Moment">
+<h1 id="title">🎉 Happy New Year 🎉</h1>
 
-    <p>
-      Before this year ends, I just want you to know how special you are to me.<br><br>
-      You made my days brighter just by being you, and I’m really grateful I met you this year.<br><br>
-      I hope the new year brings you happiness, peace, and lots of smiles — and maybe more moments for us too 🤍
-    </p>
+<div id="letter">
+  <p>
+    Before this year ends, I just want you to know how special you are to me 🤍<br><br>
+    You made my days brighter just by being you, and meeting you was one of the best things that happened this year.<br><br>
+    I hope the new year brings you happiness, peace, and countless smiles — and maybe more moments for us too ✨
+  </p>
+  <p style="margin-top:20px;">❤️</p>
+</div>
 
-    <div class="heart">❤️✨</div>
-  </div>
+<script>
+const btn = document.getElementById("openBtn");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let fireworks = [];
+
+btn.onclick = () => {
+  btn.style.display = "none";
+  startFireworks();
+
+  setTimeout(() => {
+    document.getElementById("title").style.display = "block";
+  }, 2000);
+
+  setTimeout(() => {
+    document.getElementById("letter").style.display = "block";
+  }, 4000);
+};
+
+function Firework() {
+  this.x = Math.random() * canvas.width;
+  this.y = Math.random() * canvas.height / 2;
+  this.radius = 2;
+  this.color = `hsl(${Math.random()*360},100%,50%)`;
+  this.life = 60;
+}
+
+function startFireworks() {
+  setInterval(() => {
+    fireworks.push(new Firework());
+  }, 300);
+
+  animate();
+}
+
+function animate() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  fireworks.forEach((f, i) => {
+    ctx.beginPath();
+    ctx.arc(f.x, f.y, f.radius, 0, Math.PI*2);
+    ctx.fillStyle = f.color;
+    ctx.fill();
+    f.radius += 1;
+    f.life--;
+    if (f.life <= 0) fireworks.splice(i,1);
+  });
+  requestAnimationFrame(animate);
+}
+</script>
 
 </body>
 </html>
