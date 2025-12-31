@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Happy New Year tutuuuu ❤️</title>
+<title>Happy New Year ❤️</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -27,18 +27,23 @@
     border: none;
     color: white;
     cursor: pointer;
+    z-index: 10;
   }
 
   canvas {
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 1;
+    pointer-events: none;
   }
 
   #title {
     display: none;
     font-size: 40px;
     margin-top: 100px;
+    z-index: 5;
+    position: relative;
     animation: fadeIn 2s ease-in-out forwards;
   }
 
@@ -50,6 +55,8 @@
     margin: 30px auto;
     padding: 25px;
     border-radius: 20px;
+    z-index: 5;
+    position: relative;
     animation: slideUp 2s ease forwards;
   }
 
@@ -86,12 +93,13 @@
 const btn = document.getElementById("openBtn");
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
+
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
 let fireworks = [];
 
-btn.onclick = () => {
+btn.addEventListener("click", () => {
   btn.style.display = "none";
   startFireworks();
 
@@ -102,39 +110,42 @@ btn.onclick = () => {
   setTimeout(() => {
     document.getElementById("letter").style.display = "block";
   }, 4000);
-};
+});
 
 function Firework() {
   this.x = Math.random() * canvas.width;
   this.y = Math.random() * canvas.height / 2;
   this.radius = 2;
-  this.color = `hsl(${Math.random()*360},100%,50%)`;
-  this.life = 60;
+  this.life = 50;
+  this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
 }
 
 function startFireworks() {
   setInterval(() => {
     fireworks.push(new Firework());
   }, 300);
-
   animate();
 }
 
 function animate() {
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   fireworks.forEach((f, i) => {
     ctx.beginPath();
-    ctx.arc(f.x, f.y, f.radius, 0, Math.PI*2);
+    ctx.arc(f.x, f.y, f.radius, 0, Math.PI * 2);
     ctx.fillStyle = f.color;
     ctx.fill();
     f.radius += 1;
     f.life--;
-    if (f.life <= 0) fireworks.splice(i,1);
+    if (f.life <= 0) fireworks.splice(i, 1);
   });
   requestAnimationFrame(animate);
 }
+
+window.onresize = () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+};
 </script>
 
 </body>
 </html>
-
